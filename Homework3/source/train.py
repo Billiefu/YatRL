@@ -2,7 +2,7 @@
 Copyright (C) 2025 Fu Tszkok
 
 :module: train
-:function: Manages the AlphaZero training pipeline, including self-play, data collection, and model optimization.
+:function: Manages the AlphaZero training pipeline, including self-play with Dirichlet noise, Pitting (Best vs Current), and model optimization.
 :author: Fu Tszkok
 :date: 2025-12-08
 :license: AGPLv3 + Additional Restrictions (Non-Commercial Use)
@@ -32,45 +32,69 @@ class TrainPipeline:
     """Controls the complete training loop for the AlphaZero algorithm."""
 
     def __init__(self, init_model=None):
-        """Initializes the training pipeline parameters and components.
+        """Initializes the training pipeline parameters, models, and components.
         :param init_model: Path to a pretrained model file (optional).
         """
-        # Game parameters
-        self.board_width = 8
-        self.board_height = 8
+        # --- 1. Game & Board Configuration ---
+        # Increased board size to 10x10 for higher complexity.
+        self.board_width = 10
+        self.board_height = 10
         self.n_in_row = 5
         self.board = Board(width=self.board_width, height=self.board_height, n_in_row=self.n_in_row)
         self.game = self.board
 
-        # Training hyperparameters
+        # --- 2. Training Hyperparameters ---
         self.learn_rate = 2e-3
-        self.lr_multiplier = 1.0        # Adaptive multiplier for learning rate
-        self.temp = 1.0                 # Temperature parameter for MCTS exploration
-        self.n_playout = 400            # Number of MCTS simulations per move
-        self.c_puct = 5                 # Exploration constant
+        self.lr_multiplier = 1.0        # Adaptive multiplier for learning rate decay
+        self.temp = 1.0                 # Temperature parameter for MCTS exploration (tau)
+        self.n_playout = 400            # Number of MCTS simulations per move during training
+        self.c_puct = 5                 # Exploration constant for PUCT formula
         self.buffer_size = 10000        # Experience replay buffer size
         self.batch_size = 512           # Mini-batch size for training
         self.data_buffer = deque(maxlen=self.buffer_size)
+
         self.play_batch_size = 1        # Number of self-play games per iteration
         self.epochs = 5                 # Number of training epochs per batch of new data
-        self.check_freq = 50            # Frequency of evaluation (in iterations)
-        self.game_batch_num = 1500      # Total number of training iterations
+        self.check_freq = 50            # Frequency of evaluation/pitting (in iterations)
+        self.game_batch_num = 3000      # Total number of training iterations (increased for larger board)
 
-        # Tracking and saving
+        # --- 3. Model & Device Setup ---
+        self.save_dir = './result/'
+        self.best_model_path = os.path.join(self.save_dir, 'best_policy.pth')
+
+        # Auto-detect computation device (CUDA/CPU)
+        self.device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
+        print(f"Training pipeline initialized on device: {self.device}")
+
+        # Initialize the 'Current' Policy-Value Network (The challenger)
+        self.policy_value_net = PolicyValueNet(self.board_width, self.board_height, num_res_blocks=4)
+
+        # Initialize the 'Best' Policy-Value Network (The champion/opponent)
+        self.best_policy_net = PolicyValueNet(self.board_width, self.board_height, num_res_blocks=4)
+
+        if init_model:
+            print(f"Loading pretrained model from {init_model}...")
+            state_dict = torch.load(init_model, map_location=self.device)
+            self.policy_value_net.load_state_dict(state_dict)
+            self.best_policy_net.load_state_dict(state_dict)
+        else:
+            print("Initializing new models with deeper ResNet structure...")
+            # If starting from scratch, save the initial random model as the 'best' one
+            if not os.path.exists(self.save_dir):
+                os.makedirs(self.save_dir)
+            torch.save(self.policy_value_net.state_dict(), self.best_model_path)
+            self.best_policy_net.load_state_dict(self.policy_value_net.state_dict())
+
+        # Wrap networks for easy MCTS inference
+        self.policy_value_net_wrapper = NetWrapper(self.policy_value_net)
+        self.best_model_wrapper = NetWrapper(self.best_policy_net)
+
+        # Initialize MCTS player for self-play using the CURRENT model
+        self.mcts_player = MCTS(self.policy_value_net_wrapper.policy_value_fn, c_puct=self.c_puct, n_playout=self.n_playout)
+
+        # Tracking metrics
         self.loss_records = []
         self.win_rate_records = []
-        self.save_dir = './result/'
-
-        # Initialize the Policy-Value Network
-        if init_model:
-            self.policy_value_net = PolicyValueNet(self.board_width, self.board_height)
-            self.policy_value_net.load_state_dict(torch.load(init_model))
-        else:
-            self.policy_value_net = PolicyValueNet(self.board_width, self.board_height)
-
-        self.policy_value_net_wrapper = NetWrapper(self.policy_value_net)
-        # Initialize MCTS player for self-play
-        self.mcts_player = MCTS(self.policy_value_net_wrapper.policy_value_fn, c_puct=self.c_puct, n_playout=self.n_playout)
 
     def get_equi_data(self, play_data):
         """Augments the dataset by rotating and flipping the board.
@@ -93,20 +117,27 @@ class TrainPipeline:
         return extend_data
 
     def collect_selfplay_data(self, n_games=1):
-        """Runs self-play games to collect training data.
+        """Runs self-play games using the Current Model to collect training data.
         :param n_games: The number of games to play.
         :return: A list of (state, probabilities, winner) tuples representing the game history.
         """
         for i in range(n_games):
             self.board.init_board()
-            self.mcts_player.update_with_move(-1)
+            self.mcts_player.update_with_move(-1) # Reset search tree
 
             states, mcts_probs, current_players = [], [], []
 
             while True:
-                # Use high temperature for the first 30 moves to encourage exploration
-                temp = self.temp if len(states) < 30 else 1e-3
-                acts, probs = self.mcts_player.get_move_probs(self.board, temp=temp)
+                # Get action probabilities from MCTS
+                acts, probs = self.mcts_player.get_move_probs(self.board, temp=self.temp)
+
+                # This is crucial for AlphaZero to discover new strategies.
+                # 0.3 is the noise weight (epsilon), 0.75 is the prior weight.
+                p_dirichlet = np.random.dirichlet(0.3 * np.ones(len(probs)))
+                probs = 0.75 * probs + 0.25 * p_dirichlet
+
+                # Normalize probabilities again to ensure sum is 1.0
+                probs /= np.sum(probs)
 
                 # Store the move probabilities for the full board size
                 move_probs = np.zeros(self.board_width * self.board_height)
@@ -155,35 +186,68 @@ class TrainPipeline:
             loss_sum += loss
         return loss_sum / self.epochs
 
-    def evaluate_policy(self, n_games=6):
-        """Evaluates the current policy against a pure MCTS baseline.
+    def evaluate_against_best_model(self, n_games=10):
+        """Runs the 'Pitting' process: Current Model vs. Best Model.
+        :param n_games: Number of games to play for the duel.
+        :return: The win rate of the Current Model (0.0 to 1.0).
+        """
+        # 1. Setup Players
+        # Current Model Player (Challenger)
+        current_mcts_player = MCTS(self.policy_value_net_wrapper.policy_value_fn, c_puct=self.c_puct, n_playout=self.n_playout)
+
+        # Best Model Player (Champion) - Set to evaluation mode
+        self.best_policy_net.eval()
+        best_mcts_player = MCTS(self.best_model_wrapper.policy_value_fn, c_puct=self.c_puct, n_playout=self.n_playout)
+
+        win_cnt = {'Current': 0, 'Best': 0, 'Tie': 0}
+
+        # 2. Play Games
+        for i in range(n_games):
+            # Alternate starting player to ensure fairness
+            # start_player=0 -> Player 1 starts.
+            # We assign Current Model to Player 1, Best Model to Player 2
+            winner, _ = self.start_play(current_mcts_player, best_mcts_player, start_player=i % 2)
+
+            if winner == 1:
+                win_cnt['Current'] += 1
+            elif winner == 2:
+                win_cnt['Best'] += 1
+            else:
+                win_cnt['Tie'] += 1
+
+        # Calculate Win Rate (Draws count as 0.5 win)
+        win_rate = (win_cnt['Current'] + 0.5 * win_cnt['Tie']) / n_games
+        print(f"Pitting Result: Current {win_cnt['Current']} - {win_cnt['Best']} Best (Ties: {win_cnt['Tie']})")
+        return win_rate
+
+    def evaluate_against_pure_mcts(self, n_games=6):
+        """Evaluates the current policy against a pure MCTS baseline (for benchmarking).
         :param n_games: The number of games to play for evaluation.
         :return: A tuple (win_rate, played_boards_history).
         """
         current_mcts_player = MCTS(self.policy_value_net_wrapper.policy_value_fn, c_puct=self.c_puct, n_playout=self.n_playout)
 
         # Pure MCTS uses a uniform random policy rollout
+        # Increased playouts for Pure MCTS to provide a stronger benchmark
         pure_mcts_player = MCTS(
             lambda board: (zip(board.available, [1 / len(board.available)] * len(board.available)), 0) if len(board.available) > 0 else ([], 0),
-            c_puct=5, n_playout=1000)
+            c_puct=5, n_playout=2000)
 
-        win_cnt = {'AlphaZero': 0, 'PureMCTS': 0, 'Tie': 0}
+        win_cnt = 0
         played_boards = []
 
         for i in range(n_games):
-            # Alternate starting player
             winner, final_states = self.start_play(current_mcts_player, pure_mcts_player, start_player=i % 2)
             played_boards.append(final_states)
             if winner == 1:
-                win_cnt['AlphaZero'] += 1
-            elif winner == 2:
-                win_cnt['PureMCTS'] += 1
-            else:
-                win_cnt['Tie'] += 1
-        return win_cnt['AlphaZero'] / n_games, played_boards
+                win_cnt += 1
+            elif winner == -1:
+                win_cnt += 0.5 # Tie counts as 0.5
+
+        return win_cnt / n_games, played_boards
 
     def start_play(self, player1, player2, start_player=0):
-        """Plays a single game between two MCTS players.
+        """Plays a single game between two MCTS players (helper function).
         :param player1: The first player instance (assigned index 1).
         :param player2: The second player instance (assigned index 2).
         :param start_player: The index of the starting player (0 or 1).
@@ -200,7 +264,7 @@ class TrainPipeline:
 
         while True:
             player_in_turn = players[self.board.current_player]
-            # Use low temperature for deterministic play during evaluation
+            # Use deterministic policy (temp close to 0) for evaluation
             acts, probs = player_in_turn.get_move_probs(self.board, temp=1e-3)
             move = np.random.choice(acts, p=probs)
 
@@ -223,7 +287,7 @@ class TrainPipeline:
 
         with tqdm(range(self.game_batch_num), desc="Training") as pbar:
             for i in pbar:
-                # 1. Self-Play: Collect data
+                # 1. Self-Play: Collect data using the Current Model (with noise)
                 play_data = self.collect_selfplay_data(self.play_batch_size)
                 self.data_buffer.extend(play_data)
 
@@ -235,27 +299,43 @@ class TrainPipeline:
                 else:
                     pbar.set_postfix({'buffer': len(self.data_buffer)})
 
-                # 3. Evaluation: Check performance periodically
+                # 3. Evaluation & Pitting: Check performance periodically
                 if (i + 1) % self.check_freq == 0:
-                    pbar.write("Evaluating policy...")
+                    pbar.write(f"\n--- Batch {i+1} Evaluation ---")
 
-                    win_rate, played_boards = self.evaluate_policy(n_games=10)
-                    self.win_rate_records.append((i + 1, win_rate))
+                    # A. Pitting: Challenge the Best Model
+                    win_rate_vs_best = self.evaluate_against_best_model(n_games=10)
 
-                    pbar.write(f"Win rate against Pure MCTS: {win_rate:.2f}")
+                    # If Current Model wins >= 55% of games, it becomes the new Best Model
+                    if win_rate_vs_best >= 0.55:
+                        pbar.write(f"New Best Model! Win rate: {win_rate_vs_best:.2f}")
+                        # Save current model as the best model
+                        torch.save(self.policy_value_net.state_dict(), self.best_model_path)
+                        # Update the Best Model in memory
+                        self.best_policy_net.load_state_dict(self.policy_value_net.state_dict())
+                        self.best_model_wrapper = NetWrapper(self.best_policy_net)
+                    else:
+                        pbar.write(f"Challenge Failed. Win rate: {win_rate_vs_best:.2f}")
 
-                    # Save plots and model
+                    # B. Benchmarking: Check against Pure MCTS (for visualization)
+                    win_rate_pure, played_boards = self.evaluate_against_pure_mcts(n_games=10)
+                    self.win_rate_records.append((i + 1, win_rate_pure))
+                    pbar.write(f"Win rate against Pure MCTS: {win_rate_pure:.2f}")
+
+                    # Save plots and checkpoint
                     plot_loss(self.save_dir, self.loss_records)
                     plot_win_rate(self.save_dir, self.win_rate_records)
                     plot_games(self.save_dir, played_boards, i + 1, self.board_width, self.board_height)
 
-                    pbar.write(f"Evaluation games saved to ./result/eval_batch_{i + 1}.png")
+                    # Also save current policy as a checkpoint
                     torch.save(self.policy_value_net.state_dict(), os.path.join(self.save_dir, 'current_policy.pth'))
 
-                    if win_rate >= 0.95:
-                        pbar.write("Win rate reached criteria, model performs excellently!")
+                # 4. Learning Rate Decay: Reduce LR periodically
+                if (i + 1) % 1000 == 0:
+                    self.lr_multiplier *= 0.5
+                    pbar.write(f"Learning Rate Multiplier decayed to {self.lr_multiplier}")
 
 
 if __name__ == '__main__':
-    pipline = TrainPipeline()
-    pipline.run()
+    pipeline = TrainPipeline()
+    pipeline.run()

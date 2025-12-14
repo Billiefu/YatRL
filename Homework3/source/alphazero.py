@@ -58,7 +58,7 @@ class ResidualBlock(nn.Module):
 class PolicyValueNet(nn.Module):
     """Implements the Policy-Value Network used in AlphaZero."""
 
-    def __init__(self, board_width, board_height, num_res_blocks=2, num_channels=64):
+    def __init__(self, board_width, board_height, num_res_blocks=4, num_channels=64):
         """Initializes the Policy-Value Network.
         :param board_width: The width of the game board.
         :param board_height: The height of the game board.
@@ -118,13 +118,12 @@ class PolicyValueNet(nn.Module):
 class NetWrapper(object):
     """Wraps the PolicyValueNet to handle training steps and data conversion."""
 
-    def __init__(self, policy_value_net, device='cpu'):
+    def __init__(self, policy_value_net):
         """Initializes the network wrapper.
         :param policy_value_net: An instance of PolicyValueNet.
-        :param device: The computation device ('cpu' or 'cuda').
         """
         self.policy_value_net = policy_value_net
-        self.device = device
+        self.device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
         self.policy_value_net.to(self.device)
 
     def policy_value_fn(self, board):

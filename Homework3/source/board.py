@@ -154,7 +154,7 @@ class Board(object):
                 return True, player
 
             # Check anti-diagonal line (/): m, m+(w-1), ...
-            if (w in range(width - n + 1) and h in range(n - 1, height) and
+            if (w in range(n - 1, width) and h in range(height - n + 1) and
                     len(set(states.get(i, -1) for i in range(m, m + n * (width - 1), width - 1))) == 1):
                 return True, player
 
