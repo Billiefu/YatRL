@@ -93,7 +93,7 @@ class GomokuGUI:
             policy_value_net.load_state_dict(state_dict)
 
             # Wrap network for MCTS
-            net_wrapper = NetWrapper(policy_value_net, device='cpu')
+            net_wrapper = NetWrapper(policy_value_net)
 
             # Create MCTS player
             return MCTS(net_wrapper.policy_value_fn, c_puct=5, n_playout=PLAYOUTS)
