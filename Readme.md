@@ -13,7 +13,6 @@ All original code in this repository is licensed under the **[GNU Affero General
 * **Commercial Use Restriction**
   Any form of commercial use, integration, or distribution requires prior written permission.
 * **Academic Citation Requirement**When referenced in research or teaching, proper attribution must include:
-
   * Original author credit
   * Link to this repository
 * **Academic Integrity Clause**
@@ -26,6 +25,7 @@ The full legal text is available in the aforementioned license documents. Usage 
 * Homework1 - Grid Maze Solver
 * Homework2 - Cliff Walk with TD Learning
 * Homework3 - DRL Application (Gomoku with AlphaZero)
+* Homework4 - Final Project (Liar's Bar)
 
 Additionally, in the root directory of this repository, you will find the repository's documentation (`Readme.md`), its environment configuration file (`environment.yml`), and the open-source license (`LICENSE`).
 
