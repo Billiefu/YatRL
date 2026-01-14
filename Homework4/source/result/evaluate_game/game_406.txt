@@ -1,0 +1,76 @@
+=== Liar's Bar Log | 2026-01-14 22:10:42.212722 ===
+File: evaluate_game/game_406.txt
+
+--- Game Start ---
+P0 (AggressiveBluffer) Hand: ['Q', 'K', 'A', 'Joker', 'Q']
+P1 (AggressiveChallenger) Hand: ['Joker', 'Q', 'J', 'Q', 'K']
+P2 (Conservative) Hand: ['A', 'J', 'Q', 'A', 'A']
+P3 (Rational) Hand: ['A', 'J', 'Q', 'J', 'J']
+Turn P3: DOUBT!
+Turn P0: Played ['Q']
+Turn P1: Played ['Joker']
+Turn P2: Played ['Q']
+Turn P3: DOUBT!
+!!! P3 doubts P2 !!!
+  > TRUTH! P2 was honest. P3 plays Russian Roulette.
+  > CLICK. P3 survives.
+Turn P0: DOUBT!
+Turn P1: Played ['Q']
+Turn P2: Played ['A']
+Turn P3: DOUBT!
+!!! P3 doubts P2 !!!
+  > LIAR CAUGHT! P2 was lying (Played ['A'] on Q).
+  > CLICK. P2 survives.
+Turn P0: DOUBT!
+Turn P1: DOUBT!
+Turn P2: DOUBT!
+Turn P3: Played ['A']
+Turn P0: DOUBT!
+!!! P0 doubts P3 !!!
+  > LIAR CAUGHT! P3 was lying (Played ['A'] on Q).
+  > CLICK. P3 survives.
+Turn P1: DOUBT!
+Turn P2: Played ['A']
+Turn P3: DOUBT!
+!!! P3 doubts P2 !!!
+  > LIAR CAUGHT! P2 was lying (Played ['A'] on Q).
+  > CLICK. P2 survives.
+Turn P0: Played ['K']
+Turn P1: Played ['J']
+Turn P2: DOUBT!
+!!! P2 doubts P1 !!!
+  > LIAR CAUGHT! P1 was lying (Played ['J'] on Q).
+  > CLICK. P1 survives.
+Turn P3: Played ['J']
+Turn P0: DOUBT!
+!!! P0 doubts P3 !!!
+  > LIAR CAUGHT! P3 was lying (Played ['J'] on Q).
+  > CLICK. P3 survives.
+Turn P1: DOUBT!
+Turn P2: DOUBT!
+Turn P3: Played ['Q']
+Turn P0: DOUBT!
+!!! P0 doubts P3 !!!
+  > TRUTH! P3 was honest. P0 plays Russian Roulette.
+  > BANG! P0 is eliminated.
+Turn P1: Played ['Q']
+Turn P2: DOUBT!
+!!! P2 doubts P1 !!!
+  > TRUTH! P1 was honest. P2 plays Russian Roulette.
+  > BANG! P2 is eliminated.
+Turn P3: DOUBT!
+Turn P1: DOUBT!
+Turn P3: Played ['J']
+Turn P1: Played ['K']
+Turn P3: DOUBT!
+!!! P3 doubts P1 !!!
+  > LIAR CAUGHT! P1 was lying (Played ['K'] on Q).
+  > CLICK. P1 survives.
+Turn P1: DOUBT!
+Turn P3: Played ['J']
+Turn P1: Played ['A']
+Turn P3: DOUBT!
+!!! P3 doubts P1 !!!
+  > LIAR CAUGHT! P1 was lying (Played ['A'] on Q).
+  > BANG! P1 is eliminated.
+-> Game Over. Winner: P3

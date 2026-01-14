@@ -1,0 +1,34 @@
+=== Liar's Bar Log | 2026-01-14 22:10:26.081868 ===
+File: evaluate_game/game_326.txt
+
+--- Game Start ---
+P0 (AggressiveBluffer) Hand: ['J', 'Q', 'K', 'J', 'K']
+P1 (AggressiveChallenger) Hand: ['K', 'A', 'Q', 'J', 'J']
+P2 (Conservative) Hand: ['A', 'K', 'Q', 'Joker', 'K']
+P3 (Rational) Hand: ['A', 'A', 'Q', 'A', 'J']
+Turn P3: DOUBT!
+Turn P0: Played ['J']
+Turn P1: Played ['K']
+Turn P2: Played ['Q']
+Turn P3: Played ['A']
+Turn P0: Played ['Q']
+Turn P1: DOUBT!
+!!! P1 doubts P0 !!!
+  > LIAR CAUGHT! P0 was lying (Played ['Q'] on A).
+  > BANG! P0 is eliminated.
+Turn P2: DOUBT!
+Turn P3: DOUBT!
+Turn P1: DOUBT!
+Turn P2: DOUBT!
+Turn P3: Played ['A']
+Turn P1: DOUBT!
+!!! P1 doubts P3 !!!
+  > TRUTH! P3 was honest. P1 plays Russian Roulette.
+  > BANG! P1 is eliminated.
+Turn P2: DOUBT!
+Turn P3: Played ['Q']
+Turn P2: DOUBT!
+!!! P2 doubts P3 !!!
+  > LIAR CAUGHT! P3 was lying (Played ['Q'] on A).
+  > BANG! P3 is eliminated.
+-> Game Over. Winner: P2

@@ -1,0 +1,74 @@
+=== Liar's Bar Log | 2026-01-14 22:12:24.468041 ===
+File: evaluate_game/game_909.txt
+
+--- Game Start ---
+P0 (AggressiveBluffer) Hand: ['A', 'J', 'A', 'Q', 'K']
+P1 (AggressiveChallenger) Hand: ['Q', 'K', 'Q', 'J', 'K']
+P2 (Conservative) Hand: ['Joker', 'J', 'Q', 'Joker', 'J']
+P3 (Rational) Hand: ['A', 'A', 'J', 'A', 'J']
+Turn P3: Played ['A']
+Turn P0: DOUBT!
+!!! P0 doubts P3 !!!
+  > LIAR CAUGHT! P3 was lying (Played ['A'] on K).
+  > CLICK. P3 survives.
+Turn P1: Played ['Q']
+Turn P2: DOUBT!
+!!! P2 doubts P1 !!!
+  > LIAR CAUGHT! P1 was lying (Played ['Q'] on K).
+  > BANG! P1 is eliminated.
+Turn P3: Played ['A']
+Turn P0: DOUBT!
+!!! P0 doubts P3 !!!
+  > LIAR CAUGHT! P3 was lying (Played ['A'] on K).
+  > BANG! P3 is eliminated.
+Turn P2: Played ['Q']
+Turn P0: DOUBT!
+!!! P0 doubts P2 !!!
+  > LIAR CAUGHT! P2 was lying (Played ['Q'] on K).
+  > CLICK. P2 survives.
+Turn P2: DOUBT!
+Turn P0: DOUBT!
+Turn P2: DOUBT!
+Turn P0: Played ['A']
+Turn P2: DOUBT!
+!!! P2 doubts P0 !!!
+  > LIAR CAUGHT! P0 was lying (Played ['A'] on K).
+  > CLICK. P0 survives.
+Turn P0: DOUBT!
+Turn P2: DOUBT!
+Turn P0: Played ['J']
+Turn P2: DOUBT!
+!!! P2 doubts P0 !!!
+  > LIAR CAUGHT! P0 was lying (Played ['J'] on K).
+  > CLICK. P0 survives.
+Turn P0: Played ['A']
+Turn P2: DOUBT!
+!!! P2 doubts P0 !!!
+  > LIAR CAUGHT! P0 was lying (Played ['A'] on K).
+  > CLICK. P0 survives.
+Turn P0: Played ['Q']
+Turn P2: Played ['Joker']
+Turn P0: Played ['K']
+Turn P2: Played ['J']
+Turn P0: Played ['Q']
+Turn P2: DOUBT!
+!!! P2 doubts P0 !!!
+  > LIAR CAUGHT! P0 was lying (Played ['Q'] on K).
+  > CLICK. P0 survives.
+Turn P0: Played ['Q']
+Turn P2: Played ['Joker']
+Turn P0: Played ['K']
+Turn P2: Played ['J']
+Turn P0: Played ['A']
+Turn P2: Played ['Joker']
+Turn P0: DOUBT!
+!!! P0 doubts P2 !!!
+  > TRUTH! P2 was honest. P0 plays Russian Roulette.
+  > CLICK. P0 survives.
+Turn P2: DOUBT!
+Turn P0: Played ['Q']
+Turn P2: DOUBT!
+!!! P2 doubts P0 !!!
+  > LIAR CAUGHT! P0 was lying (Played ['Q'] on K).
+  > BANG! P0 is eliminated.
+-> Game Over. Winner: P2

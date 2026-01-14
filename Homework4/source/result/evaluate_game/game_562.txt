@@ -1,0 +1,37 @@
+=== Liar's Bar Log | 2026-01-14 22:11:12.940232 ===
+File: evaluate_game/game_562.txt
+
+--- Game Start ---
+P0 (AggressiveBluffer) Hand: ['J', 'K', 'J', 'J', 'Q']
+P1 (AggressiveChallenger) Hand: ['K', 'Joker', 'A', 'A', 'Q']
+P2 (Conservative) Hand: ['Q', 'K', 'K', 'Joker', 'Q']
+P3 (Rational) Hand: ['K', 'J', 'A', 'K', 'A']
+Turn P1: DOUBT!
+Turn P2: Played ['K']
+Turn P3: Played ['K']
+Turn P0: DOUBT!
+!!! P0 doubts P3 !!!
+  > LIAR CAUGHT! P3 was lying (Played ['K'] on A).
+  > BANG! P3 is eliminated.
+Turn P1: Played ['K']
+Turn P2: Played ['Joker']
+Turn P0: Played ['J']
+Turn P1: Played ['Joker']
+Turn P2: Played ['Q']
+Turn P0: Played ['K']
+Turn P1: DOUBT!
+!!! P1 doubts P0 !!!
+  > LIAR CAUGHT! P0 was lying (Played ['K'] on A).
+  > CLICK. P0 survives.
+Turn P2: Played ['Q']
+Turn P0: DOUBT!
+!!! P0 doubts P2 !!!
+  > LIAR CAUGHT! P2 was lying (Played ['Q'] on A).
+  > BANG! P2 is eliminated.
+Turn P1: Played ['A']
+Turn P0: Played ['J']
+Turn P1: DOUBT!
+!!! P1 doubts P0 !!!
+  > LIAR CAUGHT! P0 was lying (Played ['J'] on A).
+  > BANG! P0 is eliminated.
+-> Game Over. Winner: P1

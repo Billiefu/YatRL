@@ -1,0 +1,66 @@
+=== Liar's Bar Log | 2026-01-14 22:09:17.440286 ===
+File: evaluate_game/game_5.txt
+
+--- Game Start ---
+P0 (AggressiveBluffer) Hand: ['A', 'K', 'A', 'A', 'K']
+P1 (AggressiveChallenger) Hand: ['A', 'J', 'Q', 'Q', 'J']
+P2 (Conservative) Hand: ['J', 'Q', 'J', 'K', 'K']
+P3 (Rational) Hand: ['A', 'J', 'K', 'Q', 'J']
+Turn P2: DOUBT!
+Turn P3: Played ['A']
+Turn P0: Played ['A']
+Turn P1: DOUBT!
+!!! P1 doubts P0 !!!
+  > LIAR CAUGHT! P0 was lying (Played ['A'] on J).
+  > CLICK. P0 survives.
+Turn P2: DOUBT!
+Turn P3: DOUBT!
+Turn P0: Played ['K']
+Turn P1: DOUBT!
+!!! P1 doubts P0 !!!
+  > LIAR CAUGHT! P0 was lying (Played ['K'] on J).
+  > CLICK. P0 survives.
+Turn P2: Played ['J']
+Turn P3: DOUBT!
+!!! P3 doubts P2 !!!
+  > TRUTH! P2 was honest. P3 plays Russian Roulette.
+  > BANG! P3 is eliminated.
+Turn P0: Played ['A']
+Turn P1: DOUBT!
+!!! P1 doubts P0 !!!
+  > LIAR CAUGHT! P0 was lying (Played ['A'] on J).
+  > BANG! P0 is eliminated.
+Turn P2: DOUBT!
+Turn P1: DOUBT!
+Turn P2: Played ['K']
+Turn P1: DOUBT!
+!!! P1 doubts P2 !!!
+  > LIAR CAUGHT! P2 was lying (Played ['K'] on J).
+  > CLICK. P2 survives.
+Turn P2: Played ['K']
+Turn P1: Played ['A']
+Turn P2: Played ['J']
+Turn P1: DOUBT!
+!!! P1 doubts P2 !!!
+  > TRUTH! P2 was honest. P1 plays Russian Roulette.
+  > CLICK. P1 survives.
+Turn P2: Played ['Q']
+Turn P1: DOUBT!
+!!! P1 doubts P2 !!!
+  > LIAR CAUGHT! P2 was lying (Played ['Q'] on J).
+  > CLICK. P2 survives.
+Turn P2: DOUBT!
+Turn P1: DOUBT!
+Turn P2: Played ['Q']
+Turn P1: DOUBT!
+!!! P1 doubts P2 !!!
+  > LIAR CAUGHT! P2 was lying (Played ['Q'] on J).
+  > CLICK. P2 survives.
+Turn P2: Played ['A']
+Turn P1: Played ['J']
+Turn P2: Played ['Joker']
+Turn P1: DOUBT!
+!!! P1 doubts P2 !!!
+  > TRUTH! P2 was honest. P1 plays Russian Roulette.
+  > BANG! P1 is eliminated.
+-> Game Over. Winner: P2

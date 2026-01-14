@@ -1,0 +1,84 @@
+=== Liar's Bar Log | 2026-01-14 22:10:04.673509 ===
+File: evaluate_game/game_228.txt
+
+--- Game Start ---
+P0 (AggressiveBluffer) Hand: ['K', 'K', 'J', 'J', 'K']
+P1 (AggressiveChallenger) Hand: ['K', 'Q', 'Joker', 'Q', 'A']
+P2 (Conservative) Hand: ['K', 'K', 'A', 'J', 'A']
+P3 (Rational) Hand: ['Q', 'J', 'Q', 'A', 'A']
+Turn P0: Played ['K']
+Turn P1: DOUBT!
+!!! P1 doubts P0 !!!
+  > LIAR CAUGHT! P0 was lying (Played ['K'] on A).
+  > CLICK. P0 survives.
+Turn P2: DOUBT!
+Turn P3: Played ['Q']
+Turn P0: DOUBT!
+!!! P0 doubts P3 !!!
+  > LIAR CAUGHT! P3 was lying (Played ['Q'] on A).
+  > BANG! P3 is eliminated.
+Turn P1: DOUBT!
+Turn P2: Played ['A']
+Turn P0: Played ['K']
+Turn P1: Played ['K']
+Turn P2: Played ['J']
+Turn P0: Played ['J']
+Turn P1: DOUBT!
+!!! P1 doubts P0 !!!
+  > LIAR CAUGHT! P0 was lying (Played ['J'] on A).
+  > CLICK. P0 survives.
+Turn P2: DOUBT!
+Turn P0: Played ['J']
+Turn P1: DOUBT!
+!!! P1 doubts P0 !!!
+  > LIAR CAUGHT! P0 was lying (Played ['J'] on A).
+  > CLICK. P0 survives.
+Turn P2: DOUBT!
+Turn P0: Played ['K']
+Turn P1: Played ['Q']
+Turn P2: DOUBT!
+!!! P2 doubts P1 !!!
+  > LIAR CAUGHT! P1 was lying (Played ['Q'] on A).
+  > CLICK. P1 survives.
+Turn P0: Played ['A']
+Turn P1: DOUBT!
+!!! P1 doubts P0 !!!
+  > TRUTH! P0 was honest. P1 plays Russian Roulette.
+  > CLICK. P1 survives.
+Turn P2: Played ['A']
+Turn P0: Played ['K']
+Turn P1: Played ['Joker']
+Turn P2: DOUBT!
+!!! P2 doubts P1 !!!
+  > TRUTH! P1 was honest. P2 plays Russian Roulette.
+  > CLICK. P2 survives.
+Turn P0: Played ['J']
+Turn P1: DOUBT!
+!!! P1 doubts P0 !!!
+  > LIAR CAUGHT! P0 was lying (Played ['J'] on A).
+  > CLICK. P0 survives.
+Turn P2: Played ['K']
+Turn P0: DOUBT!
+!!! P0 doubts P2 !!!
+  > LIAR CAUGHT! P2 was lying (Played ['K'] on A).
+  > CLICK. P2 survives.
+Turn P1: DOUBT!
+Turn P2: DOUBT!
+Turn P0: Played ['Q']
+Turn P1: DOUBT!
+!!! P1 doubts P0 !!!
+  > LIAR CAUGHT! P0 was lying (Played ['Q'] on A).
+  > CLICK. P0 survives.
+Turn P2: Played ['K']
+Turn P0: Played ['A']
+Turn P1: Played ['Q']
+Turn P2: DOUBT!
+!!! P2 doubts P1 !!!
+  > LIAR CAUGHT! P1 was lying (Played ['Q'] on A).
+  > BANG! P1 is eliminated.
+Turn P0: Played ['K']
+Turn P2: DOUBT!
+!!! P2 doubts P0 !!!
+  > LIAR CAUGHT! P0 was lying (Played ['K'] on A).
+  > BANG! P0 is eliminated.
+-> Game Over. Winner: P2
